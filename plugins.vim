@@ -18,7 +18,7 @@ Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 
 " auto pairs like '"({
-Plug 'jiangmiao/auto-pairs'
+"Plug 'jiangmiao/auto-pairs'
 Plug 'mbbill/undotree'
 Plug 'neui/cmakecache-syntax.vim'
 Plug 'vim-scripts/bash-support.vim'
@@ -204,3 +204,6 @@ let g:goyo_width=100
 let g:goyo_margin_top = 2
 let g:goyo_margin_bottom = 2
 nnoremap <silent> <leader>z :Goyo<cr>
+
+" => autopair
+"let g:AutoPairsFlyMode = 1
