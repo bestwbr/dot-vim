@@ -47,12 +47,20 @@ Plug 'scrooloose/syntastic'
 " complete
 Plug 'Valloric/YouCompleteMe'
 " Next generation completion framework
-Plug 'shougo/neocomplete.vim'
+"Plug 'shougo/neocomplete.vim'
+if has('nvim')
+    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+    Plug 'Shougo/deoplete.nvim'
+    Plug 'roxma/nvim-yarp'
+    Plug 'roxma/vim-hug-neovim-rpc'
+endif
+Plug 'rip-rip/clang_complete'
+
 " async syntax check
 Plug 'w0rp/ale'
 "Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'cquery-project/cquery'
-Plug 'rip-rip/clang_complete'
 Plug 'kergoth/aftersyntaxc.vim'
 "provides insert mode auto-completion for quotes, parens, brackets, etc.
 Plug 'raimondi/delimitmate'
@@ -117,8 +125,18 @@ call plug#end()
 
 " ------------------------ Plug configuration ---------------------- "
 
-" YouCompleteMe
+" => YouCompleteMe
 let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
+
+" => deocomplete
+let g:deoplete#enable_at_startup = 1
+" Set a single option
+call deoplete#custom#option('auto_complete_delay', 200)
+" Pass a dictionary to set multiple options
+call deoplete#custom#option({
+			\ 'auto_complete_delay': 200,
+			\ 'smart_case': v:true,
+			\ })
 
 " => cscope
 
@@ -162,10 +180,10 @@ let g:airline#extensions#tabline#enabled = 1
 
 " => cheat.sh
 if !has('nvim')
-	let g:syntastic_javascript_checkers = [ 'jshint' ]
-	let g:syntastic_ocaml_checkers = ['merlin']
-	let g:syntastic_python_checkers = ['pylint']
-	let g:syntastic_shell_checkers = ['shellcheck']
+    let g:syntastic_javascript_checkers = [ 'jshint' ]
+    let g:syntastic_ocaml_checkers = ['merlin']
+    let g:syntastic_python_checkers = ['pylint']
+    let g:syntastic_shell_checkers = ['shellcheck']
 endif
 
 " => vim-multiple-cursors
@@ -186,4 +204,3 @@ let g:goyo_width=100
 let g:goyo_margin_top = 2
 let g:goyo_margin_bottom = 2
 nnoremap <silent> <leader>z :Goyo<cr>
-
