@@ -146,10 +146,10 @@ let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
 " => deocomplete
 let g:deoplete#enable_at_startup = 1
 " Set a single option
-call deoplete#custom#option('auto_complete_delay', 200)
+call deoplete#custom#option('auto_complete_delay', 100)
 " Pass a dictionary to set multiple options
 call deoplete#custom#option({
-			\ 'auto_complete_delay': 200,
+			\ 'auto_complete_delay': 100,
 			\ 'smart_case': v:true,
 			\ })
 
