@@ -5,7 +5,7 @@
 set nocompatible
 call plug#begin()
 
-" Color schemes
+" ## Color schemes
 Plug 'altercation/vim-colors-solarized'
 Plug 'tomasr/molokai'
 Plug 'morhetz/gruvbox'
@@ -13,21 +13,26 @@ Plug 'morhetz/gruvbox'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
-" git
+" ## Git integrated
 Plug 'airblade/vim-gitgutter'
+" A Git wrapper so awesome, it should be illegal
 Plug 'tpope/vim-fugitive'
 
 " auto pairs like '"({
 "Plug 'jiangmiao/auto-pairs'
+" gundo depend on python2.4+, we don't use it
+"Plug 'sjl/gundo.vim'
 Plug 'mbbill/undotree'
 Plug 'neui/cmakecache-syntax.vim'
 Plug 'vim-scripts/bash-support.vim'
-" A Git wrapper so awesome, it should be illegal
 "Plug 'lilydjwg/fcitx.vim'
-Plug 'junegunn/fzf', { 'dir': '/opt/fzf', 'do': './install --all' }
+Plug '/usr/bin/fzf'
 Plug 'junegunn/fzf.vim'
+" The same as fzf
 "Plug 'kien/ctrlp.vim'
 "Plug 'tmux-plugins/vim-tmux-focus-events'
+" Distraction-free writing in Vim.
+Plug 'junegunn/goyo.vim'
 " zenroom2
 Plug 'amix/vim-zenroom2'
 Plug 'vim-scripts/YankRing.vim'
@@ -42,9 +47,9 @@ Plug 'ervandew/supertab'
 " Ctags bar
 Plug 'majutsushi/tagbar'
 
-" developping support
+" ## Developping support
 Plug 'scrooloose/syntastic'
-" complete
+" ## Complete
 Plug 'Valloric/YouCompleteMe'
 " Next generation completion framework
 "Plug 'shougo/neocomplete.vim'
@@ -56,8 +61,10 @@ else
     Plug 'roxma/vim-hug-neovim-rpc'
 endif
 Plug 'rip-rip/clang_complete'
+" Coc is an intellisense engine for vim8 & neovim.
+"Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
 
-" async syntax check
+" ## Syntax check
 Plug 'w0rp/ale'
 "Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'cquery-project/cquery'
@@ -70,22 +77,29 @@ Plug 'brookhong/cscope.vim'
 " A c/c++ client/server indexer for c/c++/objc[++] with integration based on clang.
 "Plug 'andersbakken/rtags'
 "Plug 'lyuts/vim-rtags'
-" Snippets
+
+" ## Snippets
 Plug 'honza/vim-snippets'
 Plug 'SirVer/ultisnips'
 Plug 'scrooloose/nerdtree'
-"Vim plug for intensely orgasmic commenting
+
+" ## Comment
+" Vim plug for intensely orgasmic commenting
 Plug 'scrooloose/nerdcommenter'
-"tomtom/tcomment_vim
+"Plug 'tomtom/tcomment_vim'
 " Vim plug for pulling  C++ function prototypes into implementation files
 "Plug 'derekwyatt/vim-protodef'
 "Plug 'fholgado/minibufexpl.vim'
 Plug 'gcmt/wildfire.vim'
-" Code indent
+" Display thin vertical lines at each indentation level for code indented with spaces
 Plug 'Yggdroot/indentLine'
 "Plug 'nathanaelkane/vim-indent-guides'
-" Navigation
+
+" ## Navigation
+" FSwitch is designed to allow you to switch between companion files of source
+" code (e.g. "cpp" files and their corresponding "h" files).
 Plug 'derekwyatt/vim-fswitch'
+" vim-signature is a plugin to place, toggle and display marks.
 Plug 'kshenoy/vim-signature'
 "Plug 'vim-scripts/BOOKMARKS--Mark-and-Highlight-Full-Lines'
 "Just a library for some scripts.
@@ -94,10 +108,10 @@ Plug 'vim-scripts/DfrankUtil'
 Plug 'vim-scripts/vimprj'
 " Ascii drawing plugin: lines, ellipses, arrows, fills, and more!
 "Plug 'vim-scripts/DrawIt'
-Plug 'sjl/gundo.vim'
 Plug 'Lokaltog/vim-easymotion'
 Plug 'mileszs/ack.vim'
-" gdb
+
+" ## Debug
 "Plug 'Conque-GDB'
 Plug 'huawenyu/neogdb.vim'
 Plug 'neomake/neomake'
@@ -112,6 +126,7 @@ Plug 'rust-lang/rust.vim'
 Plug 'derekwyatt/vim-scala'
 
 " Markdown
+" depend on xdg-utils curl nodejs, check the installation firstly.
 Plug 'suan/vim-instant-markdown'
 
 " latex
@@ -139,7 +154,6 @@ call deoplete#custom#option({
 			\ })
 
 " => cscope
-
 nnoremap <leader>fa :call CscopeFindInteractive(expand('<cword>'))<CR>
 nnoremap <leader>t :call ToggleLocationList()<CR>
 let g:cscope_silent = 1
@@ -151,9 +165,6 @@ nmap <leader>ch :FSHere<cr>
 let g:UltiSnipsExpandTrigger="<c-j>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
-
-" => fzf
-set rtp+=/opt/fzf
 
 " => YankRing
 if has('nvim')
@@ -207,3 +218,24 @@ nnoremap <silent> <leader>z :Goyo<cr>
 
 " => autopair
 "let g:AutoPairsFlyMode = 1
+
+" => nerdcommenter
+" Add spaces after comment delimiters by default
+let g:NERDSpaceDelims = 1
+" Use compact syntax for prettified multi-line comments
+let g:NERDCompactSexyComs = 1
+" Align line-wise comment delimiters flush left instead of following code indentation
+let g:NERDDefaultAlign = 'left'
+" Set a language to use its alternate delimiters by default
+"let g:NERDAltDelims_java = 1
+" Add your own custom formats or override the defaults
+"let g:NERDCustomDelimiters = { 'c': { 'left': '/**','right': '*/' } }
+" Allow commenting and inverting empty lines (useful when commenting a region)
+let g:NERDCommentEmptyLines = 1
+" Enable trimming of trailing whitespace when uncommenting
+let g:NERDTrimTrailingWhitespace = 1
+" Enable NERDCommenterToggle to check all selected lines is commented or not
+let g:NERDToggleCheckAllLines = 1
+
+" => undotree
+nnoremap <F5> :UndotreeToggle<cr>
