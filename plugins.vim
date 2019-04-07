@@ -172,6 +172,8 @@ if has('nvim')
 else
     let g:yankring_history_dir = '~/.config/nvim/cache'
 endif
+"fix for yankring and neovim
+let g:yankring_clipboard_monitor=0
 
 " => NERDTree
 let g:NERDTreeDirArrowExpandable = '▸'
