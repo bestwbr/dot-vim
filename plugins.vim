@@ -243,5 +243,6 @@ let g:NERDToggleCheckAllLines = 1
 nnoremap <F5> :UndotreeToggle<cr>
 
 " => delimitmate
-au FileType c let delimitMate_jump_expansion = 1
+let delimitMate_jump_expansion = 1
 au FileType c let delimitMate_expand_cr = 1
+au FileType sh let delimitMate_expand_space = 1
