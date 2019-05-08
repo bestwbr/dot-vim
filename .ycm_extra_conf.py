@@ -1,85 +1,120 @@
-# This file is NOT licensed under the GPLv3, which is the license for the rest
-# of YouCompleteMe.
-#
-# Here's the license text for this file:
-#
-# This is free and unencumbered software released into the public domain.
-#
-# Anyone is free to copy, modify, publish, use, compile, sell, or
-# distribute this software, either in source code form or as a compiled
-# binary, for any purpose, commercial or non-commercial, and by any
-# means.
-#
-# In jurisdictions that recognize copyright laws, the author or authors
-# of this software dedicate any and all copyright interest in the
-# software to the public domain. We make this dedication for the benefit
-# of the public at large and to the detriment of our heirs and
-# successors. We intend this dedication to be an overt act of
-# relinquishment in perpetuity of all present and future rights to this
-# software under copyright law.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-# IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
-# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-# OTHER DEALINGS IN THE SOFTWARE.
-#
-# For more information, please refer to <http://unlicense.org/>
-
 import os
+import os.path
+import fnmatch
+import logging
 import ycm_core
+import re
 
-# These are the compilation flags that will be used in case there's no
-# compilation database set (by default, one is not set).
-# CHANGE THIS LIST OF FLAGS. YES, THIS IS THE DROID YOU HAVE BEEN LOOKING FOR.
-flags = [
-        '-std=c89',
-        '-O2',
+C_BASE_FLAGS = [
+        '-Wall',
+        '-Wextra',
         '-Werror',
-        '-Weverything',
-        '-Wno-documentation',
-        '-Wno-deprecated-declarations',
-        '-Wno-disabled-macro-expansion',
-        '-Wno-float-equal',
-        '-Wno-global-constructors',
-        '-Wno-exit-time-destructors',
-        '-Wno-missing-prototypes',
-        '-Wno-padded',
-        '-Wno-old-style-cast',
-        '-Wno-weak-vtables',
-        '-x',
-        #'c++',
-        '-I.',
-        '-I./include',
-        '-I/usr/include',
-        '-isystem/usr/include/',
-]
+        '-Wno-long-long',
+        '-Wno-variadic-macros',
+        '-fexceptions',
+        '-ferror-limit=10000',
+        '-DNDEBUG',
+        #'-std=c89',
+        #'-std=c99',
+        '-std=c11',
+        '-I/usr/lib/',
+        '-I/usr/include/'
+        ]
 
+CPP_BASE_FLAGS = [
+        '-Wall',
+        '-Wextra',
+        '-Wno-long-long',
+        '-Wno-variadic-macros',
+        '-fexceptions',
+        '-ferror-limit=10000',
+        '-DNDEBUG',
+        '-std=c++1z',
+        '-xc++',
+        '-I/usr/lib/',
+        '-I/usr/include/'
+        ]
 
-# Set this to the absolute path to the folder (NOT the file!) containing the
-# compile_commands.json file to use that instead of 'flags'. See here for
-# more details: http://clang.llvm.org/docs/JSONCompilationDatabase.html
-#
-# Most projects will NOT need to set this to anything; you can just change the
-# 'flags' list of compilation flags. Notice that YCM itself uses that approach.
-compilation_database_folder = ''
+C_SOURCE_EXTENSIONS = [
+        '.c'
+        ]
 
-if compilation_database_folder:
-    database = ycm_core.CompilationDatabase( compilation_database_folder )
-else:
-    database = None
+CPP_SOURCE_EXTENSIONS = [
+        '.cpp',
+        '.cxx',
+        '.cc',
+        '.m',
+        '.mm'
+        ]
 
-SOURCE_EXTENSIONS = [ '.cpp', '.cxx', '.cc', '.c' ]
+SOURCE_DIRECTORIES = [
+        'src',
+        'lib'
+        ]
 
-def DirectoryOfThisScript():
-    return os.path.dirname( os.path.abspath( __file__ ) )
+HEADER_EXTENSIONS = [
+        '.h',
+        '.hxx',
+        '.hpp',
+        '.hh'
+        ]
 
+HEADER_DIRECTORIES = [
+        'include'
+        ]
 
-def MakeRelativePathsInFlagsAbsolute( flags, working_directory ):
+BUILD_DIRECTORY = 'build';
+
+def IsSourceFile(filename):
+    extension = os.path.splitext(filename)[1]
+    return extension in C_SOURCE_EXTENSIONS + CPP_SOURCE_EXTENSIONS
+
+def IsHeaderFile(filename):
+    extension = os.path.splitext(filename)[1]
+    return extension in HEADER_EXTENSIONS
+
+def GetCompilationInfoForFile(database, filename):
+    if IsHeaderFile(filename):
+        basename = os.path.splitext(filename)[0]
+        for extension in C_SOURCE_EXTENSIONS + CPP_SOURCE_EXTENSIONS:
+            # Get info from the source files by replacing the extension.
+            replacement_file = basename + extension
+            if os.path.exists(replacement_file):
+                compilation_info = database.GetCompilationInfoForFile(replacement_file)
+                if compilation_info.compiler_flags_:
+                    return compilation_info
+            # If that wasn't successful, try replacing possible header directory with possible source directories.
+            for header_dir in HEADER_DIRECTORIES:
+                for source_dir in SOURCE_DIRECTORIES:
+                    src_file = replacement_file.replace(header_dir, source_dir)
+                    if os.path.exists(src_file):
+                        compilation_info = database.GetCompilationInfoForFile(src_file)
+                        if compilation_info.compiler_flags_:
+                            return compilation_info
+        return None
+    return database.GetCompilationInfoForFile(filename)
+
+def FindNearest(path, target, build_folder=None):
+    candidate = os.path.join(path, target)
+    if(os.path.isfile(candidate) or os.path.isdir(candidate)):
+        logging.info("Found nearest " + target + " at " + candidate)
+        return candidate;
+
+    parent = os.path.dirname(os.path.abspath(path));
+    if(parent == path):
+        raise RuntimeError("Could not find " + target);
+
+    if(build_folder):
+        candidate = os.path.join(parent, build_folder, target)
+        if(os.path.isfile(candidate) or os.path.isdir(candidate)):
+            logging.info("Found nearest " + target + " in build folder at " + candidate)
+            return candidate;
+
+    return FindNearest(parent, target, build_folder)
+
+def MakeRelativePathsInFlagsAbsolute(flags, working_directory):
     if not working_directory:
-        return list( flags )
+        return list(flags)
     new_flags = []
     make_next_absolute = False
     path_flags = [ '-isystem', '-I', '-iquote', '--sysroot=' ]
@@ -88,63 +123,85 @@ def MakeRelativePathsInFlagsAbsolute( flags, working_directory ):
 
         if make_next_absolute:
             make_next_absolute = False
-            if not flag.startswith( '/' ):
-                new_flag = os.path.join( working_directory, flag )
+            if not flag.startswith('/'):
+                new_flag = os.path.join(working_directory, flag)
 
         for path_flag in path_flags:
             if flag == path_flag:
                 make_next_absolute = True
                 break
 
-            if flag.startswith( path_flag ):
-                path = flag[ len( path_flag ): ]
-                new_flag = path_flag + os.path.join( working_directory, path )
+            if flag.startswith(path_flag):
+                path = flag[ len(path_flag): ]
+                new_flag = path_flag + os.path.join(working_directory, path)
                 break
 
         if new_flag:
-            new_flags.append( new_flag )
+            new_flags.append(new_flag)
     return new_flags
 
 
-def IsHeaderFile( filename ):
-    extension = os.path.splitext( filename )[ 1 ]
-    return extension in [ '.h', '.hxx', '.hpp', '.hh' ]
-
-
-def GetCompilationInfoForFile( filename ):
-    # The compilation_commands.json file generated by CMake does not have entries
-    # for header files. So we do our best by asking the db for flags for a
-    # corresponding source file, if any. If one exists, the flags for that file
-    # should be good enough.
-    if IsHeaderFile( filename ):
-        basename = os.path.splitext( filename )[ 0 ]
-        for extension in SOURCE_EXTENSIONS:
-            replacement_file = basename + extension
-            if os.path.exists( replacement_file ):
-                compilation_info = database.GetCompilationInfoForFile(
-                    replacement_file )
-                if compilation_info.compiler_flags_:
-                    return compilation_info
+def FlagsForClangComplete(root):
+    try:
+        clang_complete_path = FindNearest(root, '.clang_complete')
+        clang_complete_flags = open(clang_complete_path, 'r').read().splitlines()
+        return clang_complete_flags
+    except:
         return None
-    return database.GetCompilationInfoForFile( filename )
 
+def FlagsForInclude(root):
+    try:
+        include_path = FindNearest(root, 'include')
+        flags = []
+        for dirroot, dirnames, filenames in os.walk(include_path):
+            for dir_path in dirnames:
+                real_path = os.path.join(dirroot, dir_path)
+                flags = flags + ["-I" + real_path]
+        return flags
+    except:
+        return None
 
-def FlagsForFile( filename, **kwargs ):
-    if database:
-        # Bear in mind that compilation_info.compiler_flags_ does NOT return a
-        # python list, but a "list-like" StringVec object
-        compilation_info = GetCompilationInfoForFile( filename )
-        if not compilation_info:
+def FlagsForCompilationDatabase(root, filename):
+    try:
+        # Last argument of next function is the name of the build folder for
+        # out of source projects
+        compilation_db_path = FindNearest(root, 'compile_commands.json', BUILD_DIRECTORY)
+        compilation_db_dir = os.path.dirname(compilation_db_path)
+        logging.info("Set compilation database directory to " + compilation_db_dir)
+        compilation_db =  ycm_core.CompilationDatabase(compilation_db_dir)
+        if not compilation_db:
+            logging.info("Compilation database file found but unable to load")
             return None
+        compilation_info = GetCompilationInfoForFile(compilation_db, filename)
+        if not compilation_info:
+            logging.info("No compilation info for " + filename + " in compilation database")
+            return None
+        return MakeRelativePathsInFlagsAbsolute(
+                compilation_info.compiler_flags_,
+                compilation_info.compiler_working_dir_)
+    except:
+        return None
 
-        final_flags = MakeRelativePathsInFlagsAbsolute(
-            compilation_info.compiler_flags_,
-            compilation_info.compiler_working_dir_ )
+def FlagsForFile(filename):
+    root = os.path.realpath(filename);
+    compilation_db_flags = FlagsForCompilationDatabase(root, filename)
+    if compilation_db_flags:
+        final_flags = compilation_db_flags
     else:
-        relative_to = DirectoryOfThisScript()
-        final_flags = MakeRelativePathsInFlagsAbsolute( flags, relative_to )
+        if IsSourceFile(filename):
+            extension = os.path.splitext(filename)[1]
+            if extension in C_SOURCE_EXTENSIONS:
+                final_flags = C_BASE_FLAGS
+            else:
+                final_flags = CPP_BASE_FLAGS
 
+        clang_flags = FlagsForClangComplete(root)
+        if clang_flags:
+            final_flags = final_flags + clang_flags
+        include_flags = FlagsForInclude(root)
+        if include_flags:
+            final_flags = final_flags + include_flags
     return {
-        'flags': final_flags,
-        'do_cache': True
-    }
+            'flags': final_flags,
+            'do_cache': True
+            }
