@@ -169,10 +169,10 @@ map <silent> <leader><cr> :noh<cr>
 "map <C-l> <C-W>l
 
 " Close the current buffer
-map <leader>c :Bclose<cr>:tabclose<cr>gT
+map <leader>x :Bclose<cr>:tabclose<cr>gT
 
 " Close all the buffers
-map <leader>ca :bufdo bd<cr>
+map <leader>xa :bufdo bd<cr>
 
 map <leader>l :bnext<cr>
 map <leader>h :bprevious<cr>
