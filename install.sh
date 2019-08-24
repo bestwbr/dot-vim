@@ -15,3 +15,4 @@ cd ~/.vim/plugged/YouCompleteMe
 type cargo > /dev/null 2>&1 && RUST="--rust-completer" || RUST=""
 python3 install.py --clang-completer $RUST
 cd -
+mkdir cache
