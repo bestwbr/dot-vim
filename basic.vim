@@ -381,7 +381,7 @@ endfunction
 " The function for setting title
 function! SetTitle(author)
     let l:curdate = strftime('%Y')
-    let l:copyright = 'l:copyright © ' . l:curdate . ' ' . a:author . '. All Rights Reserved.' 
+    let l:copyright = 'Copyright © ' . l:curdate . ' ' . a:author . '. All Rights Reserved.'
     let l:script_env = '#!/usr/bin/env '
 
     if &filetype == 'sh'
