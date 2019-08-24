@@ -118,7 +118,7 @@ set ffs=unix,dos,mac
 " => Files, backups and undo
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Turn backup off, since most stuff is in SVN, git et.c anyway...
-set nobackup
+"set nobackup
 set nowb
 set noswapfile
 
@@ -324,8 +324,9 @@ function! VisualSelection(direction, extra_filter) range
     let l:pattern = escape(@", "\\/.*'$^~[]")
     let l:pattern = substitute(l:pattern, "\n$", "", "")
 
+    let l:search_cmd = "Rg"
     if a:direction == 'gv'
-        call CmdLine("Ack '" . l:pattern . "' " )
+        call CmdLine(l:search_cmd . " '" . l:pattern . "' " )
     elseif a:direction == 'replace'
         call CmdLine("%s" . '/'. l:pattern . '/')
     endif
@@ -333,3 +334,92 @@ function! VisualSelection(direction, extra_filter) range
     let @/ = l:pattern
     let @" = l:saved_reg
 endfunction
+
+" Intialize dirctories
+function! InitializeDirectories()
+    let vimdir = $HOME . '/.vim/'
+    let dir_list = {
+                \ 'backup': 'backupdir',
+                \ 'views': 'viewdir',
+                \ 'swap': 'directory' }
+    let cachedir = vimdir . 'cache/'
+    for [dirname, settingname] in items(dir_list)
+        let directory = cachedir . dirname . '/'
+        if exists("*mkdir")
+            if !isdirectory(directory)
+                call mkdir(directory)
+            endif
+        endif
+        if !isdirectory(directory)
+            echo "Warning: Unable to create backup directory: " . directory
+            echo "Try: mkdir -p " . directory
+        else
+            let directory = substitute(directory, " ", "\\\\ ", "g")
+            exec "set " . settingname . "=" . directory
+        endif
+    endfor
+endfunction
+call InitializeDirectories()
+
+" Strip traling whitespace
+function! StripTrailingWhitespace()
+    let _s=@/
+    let l = line(".")
+    let c = col(".")
+    %s/\s\+$//e
+    let @/=_s
+    call cursor(l, c)
+endfunction
+
+" Run string search command
+function! RunSearcher(cmd)
+    let l:pattern = expand('<cword>')
+    let l:rgcmd = ':' . a:cmd . ' ' . l:pattern
+    exec l:rgcmd
+endfunction
+
+" The function for setting title
+function! SetTitle(author)
+    let l:curdate = strftime('%Y')
+    let l:copyright = 'l:copyright © ' . l:curdate . ' ' . a:author . '. All Rights Reserved.' 
+    let l:script_env = '#!/usr/bin/env '
+
+    if &filetype == 'sh'
+        call setline(1, l:script_env . 'bash')
+        call append(line("."), "")
+        call append(line(".")+1, "")
+    elseif &filetype == 'python'
+        call setline(1, l:script_env . 'python3')
+        call append(line("."),"")
+        call append(line(".")+1, "")
+    else
+        call setline(1, "/*")
+        call append(line("."), ' * ' . l:copyright)
+        call append(line(".")+1," */")
+        call append(line(".")+2, "")
+        call append(line(".")+3, "")
+    endif
+
+    if expand("%:e") == 'c'
+        call append(line(".")+4, '#include <stdio.h>')
+        call append(line(".")+5, "")
+        call append(line(".")+6, "")
+    endif
+    if expand("%:e") == 'h'
+        call append(line(".")+4, "#ifndef _".toupper(expand("%:r"))."_H")
+        call append(line(".")+5, "#define _".toupper(expand("%:r"))."_H")
+        call append(line(".")+6, "")
+        call append(line(".")+7, "")
+        call append(line(".")+8, "")
+        call append(line(".")+9, "#endif")
+    endif
+    if expand("%:e") == 'cpp'
+        call append(line(".")+4, "#include <iostream>")
+        call append(line(".")+5, "using namespace std;")
+        call append(line(".")+6, "")
+        call append(line(".")+7, "")
+    endif
+    " move cursor to appreciate line
+    let l:line_num = line('$')
+    call cursor(l:line_num, 1)
+endfunc

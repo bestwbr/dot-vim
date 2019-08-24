@@ -165,6 +165,8 @@ nmap <leader>ch :FSHere<cr>
 let g:UltiSnipsExpandTrigger="<c-j>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+" Use honza's snippets
+let g:neosnippet#snippets_directory='~/.vim/plugged/vim-snippets/snippets'
 
 " => YankRing
 if has('nvim')
@@ -241,8 +243,17 @@ let g:NERDToggleCheckAllLines = 1
 
 " => undotree
 nnoremap <F5> :UndotreeToggle<cr>
+let g:undotree_SetFocusWhenToggle=1
 
 " => delimitmate
 let delimitMate_jump_expansion = 1
 au FileType c let delimitMate_expand_cr = 1
 au FileType sh let delimitMate_expand_space = 1
+
+" PyMode
+if isdirectory(expand("~/.vim/plugged/python-mode"))
+    let g:pymode_lint_checkers = ['pyflakes']
+    let g:pymode_trim_whitespaces = 0
+    let g:pymode_options = 0
+    let g:pymode_rope = 0
+endif
