@@ -9,7 +9,6 @@ call plug#begin()
 Plug 'altercation/vim-colors-solarized'
 Plug 'tomasr/molokai'
 Plug 'morhetz/gruvbox'
-"Plug 'vim-scripts/phd'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
@@ -20,16 +19,11 @@ Plug 'tpope/vim-fugitive'
 
 " auto pairs like '"({
 "Plug 'jiangmiao/auto-pairs'
-" gundo depend on python2.4+, we don't use it
-"Plug 'sjl/gundo.vim'
 Plug 'mbbill/undotree'
 Plug 'neui/cmakecache-syntax.vim'
 "Plug 'vim-scripts/bash-support.vim'
-"Plug 'lilydjwg/fcitx.vim'
 Plug '/usr/bin/fzf'
 Plug 'junegunn/fzf.vim'
-" The same as fzf
-"Plug 'kien/ctrlp.vim'
 "Plug 'tmux-plugins/vim-tmux-focus-events'
 " Distraction-free writing in Vim.
 Plug 'junegunn/goyo.vim'
@@ -60,6 +54,9 @@ else
     Plug 'roxma/nvim-yarp'
     Plug 'roxma/vim-hug-neovim-rpc'
 endif
+Plug 'zchee/deoplete-jedi'
+Plug 'Shougo/deoplete-clangx'
+Plug 'deoplete-plugins/deoplete-dictionary'
 Plug 'rip-rip/clang_complete'
 " Coc is an intellisense engine for vim8 & neovim.
 "Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
@@ -73,7 +70,6 @@ Plug 'kergoth/aftersyntaxc.vim'
 Plug 'raimondi/delimitmate'
 Plug 'vim-scripts/indexer.tar.gz'
 Plug 'brookhong/cscope.vim'
-"Plug 'chazy/cscope_maps'
 " A c/c++ client/server indexer for c/c++/objc[++] with integration based on clang.
 "Plug 'andersbakken/rtags'
 "Plug 'lyuts/vim-rtags'
@@ -86,10 +82,6 @@ Plug 'scrooloose/nerdtree'
 " ## Comment
 " Vim plug for intensely orgasmic commenting
 Plug 'scrooloose/nerdcommenter'
-"Plug 'tomtom/tcomment_vim'
-" Vim plug for pulling  C++ function prototypes into implementation files
-"Plug 'derekwyatt/vim-protodef'
-"Plug 'fholgado/minibufexpl.vim'
 Plug 'gcmt/wildfire.vim'
 " Display thin vertical lines at each indentation level for code indented with spaces
 Plug 'Yggdroot/indentLine'
@@ -101,7 +93,6 @@ Plug 'Yggdroot/indentLine'
 Plug 'derekwyatt/vim-fswitch'
 " vim-signature is a plugin to place, toggle and display marks.
 Plug 'kshenoy/vim-signature'
-"Plug 'vim-scripts/BOOKMARKS--Mark-and-Highlight-Full-Lines'
 "Just a library for some scripts.
 Plug 'vim-scripts/DfrankUtil'
 "Plug for managing options for different projects
@@ -145,8 +136,7 @@ let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
 
 " => deocomplete
 " Enable deoplete when InsertEnter.
-let g:deoplete#enable_at_startup = 0
-autocmd InsertEnter * call deoplete#enable()
+let g:deoplete#enable_at_startup = 1
 " Set a single option
 call deoplete#custom#option('auto_complete_delay', 100)
 " Pass a dictionary to set multiple options
@@ -154,6 +144,46 @@ call deoplete#custom#option({
 			\ 'auto_complete_delay': 100,
 			\ 'smart_case': v:true,
 			\ })
+call deoplete#custom#source('LanguageClient',
+            \ 'min_pattern_length',
+            \ 2)
+call deoplete#custom#source('_',
+            \ 'disabled_syntaxes', ['String']
+            \ )
+autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
+call deoplete#custom#option('sources', {
+            \ 'c': ['LanguageClient'],
+            \ 'python3': ['LanguageClient'],
+            \ 'zsh': ['zsh'],
+            \})
+let g:deoplete#ignore_sources = {}
+let g:deoplete#ignore_sources._ = ['buffer', 'around']
+
+set hidden
+let g:LanguageClient_rootMarkers = {
+            \ 'cpp': ['compile_commands.json', 'build'],
+            \ 'c': ['compile_commands.json', 'build']
+            \ }
+let g:LanguageClient_serverCommands = {
+            \ 'cpp': ['cquery', '--log-file=/tmp/cq.log'],
+            \ 'c': ['cquery', '--log-file=/tmp/cq.log'],
+            \ }
+
+let g:LanguageClient_loadSettings = 1
+let g:LanguageClient_settingsPath = '~/.config/cquery_setting.json'
+set completefunc=LanguageClient#complete
+set formatexpr=LanguageClient_textDocument_rangeFormatting()
+
+setlocal dictionary+=/usr/share/dict/words
+" Remove this if you'd like to use fuzzy search
+"call deoplete#custom#source(
+"            \ 'dictionary', 'matchers', ['matcher_head'])
+" If dictionary is already sorted, no need to sort it again.
+"call deoplete#custom#source(
+"            \ 'dictionary', 'sorters', [])
+" Do not complete too short words
+call deoplete#custom#source(
+            \ 'dictionary', 'min_pattern_length', 4)
 
 " => cscope
 nnoremap <leader>fa :call CscopeFindInteractive(expand('<cword>'))<CR>
@@ -172,9 +202,9 @@ let g:neosnippet#snippets_directory='~/.vim/plugged/vim-snippets/snippets'
 
 " => YankRing
 if has('nvim')
-    let g:yankring_history_dir = '~/.vim/cache'
-else
     let g:yankring_history_dir = '~/.config/nvim/cache'
+else
+    let g:yankring_history_dir = '~/.vim/cache'
 endif
 "fix for yankring and neovim
 let g:yankring_clipboard_monitor=0
@@ -197,8 +227,6 @@ let g:airline#extensions#tabline#enabled = 1
 
 " => cheat.sh
 if !has('nvim')
-    let g:syntastic_javascript_checkers = [ 'jshint' ]
-    let g:syntastic_ocaml_checkers = ['merlin']
     let g:syntastic_python_checkers = ['pylint']
     let g:syntastic_shell_checkers = ['shellcheck']
 endif
@@ -233,7 +261,6 @@ let g:NERDCompactSexyComs = 1
 " Align line-wise comment delimiters flush left instead of following code indentation
 let g:NERDDefaultAlign = 'left'
 " Set a language to use its alternate delimiters by default
-"let g:NERDAltDelims_java = 1
 " Add your own custom formats or override the defaults
 "let g:NERDCustomDelimiters = { 'c': { 'left': '/**','right': '*/' } }
 " Allow commenting and inverting empty lines (useful when commenting a region)
