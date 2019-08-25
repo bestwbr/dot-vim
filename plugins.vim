@@ -55,7 +55,6 @@ else
     Plug 'roxma/vim-hug-neovim-rpc'
 endif
 Plug 'zchee/deoplete-jedi'
-Plug 'Shougo/deoplete-clangx'
 Plug 'deoplete-plugins/deoplete-dictionary'
 Plug 'rip-rip/clang_complete'
 " Coc is an intellisense engine for vim8 & neovim.
@@ -151,13 +150,6 @@ call deoplete#custom#source('_',
             \ 'disabled_syntaxes', ['String']
             \ )
 autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
-call deoplete#custom#option('sources', {
-            \ 'c': ['LanguageClient'],
-            \ 'python3': ['LanguageClient'],
-            \ 'zsh': ['zsh'],
-            \})
-let g:deoplete#ignore_sources = {}
-let g:deoplete#ignore_sources._ = ['buffer', 'around']
 
 set hidden
 let g:LanguageClient_rootMarkers = {
@@ -179,8 +171,8 @@ setlocal dictionary+=/usr/share/dict/words
 "call deoplete#custom#source(
 "            \ 'dictionary', 'matchers', ['matcher_head'])
 " If dictionary is already sorted, no need to sort it again.
-"call deoplete#custom#source(
-"            \ 'dictionary', 'sorters', [])
+call deoplete#custom#source(
+            \ 'dictionary', 'sorters', [])
 " Do not complete too short words
 call deoplete#custom#source(
             \ 'dictionary', 'min_pattern_length', 4)
