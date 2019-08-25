@@ -55,7 +55,6 @@ else
     Plug 'roxma/vim-hug-neovim-rpc'
 endif
 Plug 'zchee/deoplete-jedi'
-Plug 'deoplete-plugins/deoplete-dictionary'
 Plug 'rip-rip/clang_complete'
 " Coc is an intellisense engine for vim8 & neovim.
 "Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
@@ -143,39 +142,6 @@ call deoplete#custom#option({
 			\ 'auto_complete_delay': 100,
 			\ 'smart_case': v:true,
 			\ })
-call deoplete#custom#source('LanguageClient',
-            \ 'min_pattern_length',
-            \ 2)
-call deoplete#custom#source('_',
-            \ 'disabled_syntaxes', ['String']
-            \ )
-autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
-
-set hidden
-let g:LanguageClient_rootMarkers = {
-            \ 'cpp': ['compile_commands.json', 'build'],
-            \ 'c': ['compile_commands.json', 'build']
-            \ }
-let g:LanguageClient_serverCommands = {
-            \ 'cpp': ['cquery', '--log-file=/tmp/cq.log'],
-            \ 'c': ['cquery', '--log-file=/tmp/cq.log'],
-            \ }
-
-let g:LanguageClient_loadSettings = 1
-let g:LanguageClient_settingsPath = '~/.vim/cquery_setting.json'
-set completefunc=LanguageClient#complete
-set formatexpr=LanguageClient_textDocument_rangeFormatting()
-
-setlocal dictionary+=/usr/share/dict/words
-" Remove this if you'd like to use fuzzy search
-"call deoplete#custom#source(
-"            \ 'dictionary', 'matchers', ['matcher_head'])
-" If dictionary is already sorted, no need to sort it again.
-call deoplete#custom#source(
-            \ 'dictionary', 'sorters', [])
-" Do not complete too short words
-call deoplete#custom#source(
-            \ 'dictionary', 'min_pattern_length', 4)
 
 " => cscope
 nnoremap <leader>fa :call CscopeFindInteractive(expand('<cword>'))<CR>
@@ -186,11 +152,11 @@ let g:cscope_silent = 1
 nmap <leader>ch :FSHere<cr>
 
 " => ultisnips
-let g:UltiSnipsExpandTrigger="<c-j>"
-let g:UltiSnipsJumpForwardTrigger="<c-b>"
-let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 " Use honza's snippets
 let g:neosnippet#snippets_directory='~/.vim/plugged/vim-snippets/snippets'
+let g:UltiSnipsExpandTrigger="<c-j>"
+let g:UltiSnipsJumpForwardTrigger="<c-l>"
+let g:UltiSnipsJumpBackwardTrigger="<c-h>"
 
 " => YankRing
 if has('nvim')
