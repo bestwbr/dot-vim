@@ -144,7 +144,9 @@ call plug#end()
 let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
 
 " => deocomplete
-let g:deoplete#enable_at_startup = 1
+" Enable deoplete when InsertEnter.
+let g:deoplete#enable_at_startup = 0
+autocmd InsertEnter * call deoplete#enable()
 " Set a single option
 call deoplete#custom#option('auto_complete_delay', 100)
 " Pass a dictionary to set multiple options
