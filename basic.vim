@@ -421,5 +421,9 @@ function! SetTitle(author)
     endif
     " move cursor to appreciate line
     let l:line_num = line('$')
-    call cursor(l:line_num, 1)
+    if expand("%:e") == 'h'
+        call cursor(l:line_num - 2, 1)
+    else
+        call cursor(l:line_num, 1)
+    endif
 endfunc
