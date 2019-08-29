@@ -156,7 +156,7 @@ nmap <leader>ch :FSHere<cr>
 let g:neosnippet#snippets_directory='~/.vim/plugged/vim-snippets/snippets'
 let g:UltiSnipsExpandTrigger="<c-j>"
 let g:UltiSnipsJumpForwardTrigger="<c-l>"
-let g:UltiSnipsJumpBackwardTrigger="<c-h>"
+let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 
 " => YankRing
 if has('nvim')

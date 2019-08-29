@@ -326,7 +326,7 @@ function! VisualSelection(direction, extra_filter) range
 
     let l:search_cmd = "Rg"
     if a:direction == 'gv'
-        call CmdLine(l:search_cmd . " '" . l:pattern . "' " )
+        call CmdLine(l:search_cmd . " " . l:pattern)
     elseif a:direction == 'replace'
         call CmdLine("%s" . '/'. l:pattern . '/')
     endif
