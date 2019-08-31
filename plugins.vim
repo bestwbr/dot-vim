@@ -37,7 +37,7 @@ if !has('nvim')
     Plug 'dbeniamine/cheat.sh-vim'
 endif
 "Perform all your vim insert mode completions with Tab
-Plug 'ervandew/supertab'
+"Plug 'ervandew/supertab'
 " Ctags bar
 Plug 'majutsushi/tagbar'
 
@@ -47,10 +47,8 @@ Plug 'scrooloose/syntastic'
 Plug 'Valloric/YouCompleteMe'
 " Next generation completion framework
 "Plug 'shougo/neocomplete.vim'
-if has('nvim')
-    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-    Plug 'Shougo/deoplete.nvim'
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+if !has('nvim')
     Plug 'roxma/nvim-yarp'
     Plug 'roxma/vim-hug-neovim-rpc'
 endif
@@ -75,6 +73,7 @@ Plug 'brookhong/cscope.vim'
 " ## Snippets
 Plug 'honza/vim-snippets'
 Plug 'SirVer/ultisnips'
+
 Plug 'scrooloose/nerdtree'
 
 " ## Comment
@@ -244,3 +243,11 @@ if isdirectory(expand("~/.vim/plugged/python-mode"))
     let g:pymode_options = 0
     let g:pymode_rope = 0
 endif
+
+" use python 3 syntax checking
+let g:pymode_python = 'python3'
+
+" ultra-useful for completion C code
+let g:clang_library_path='/usr/lib/libclang.so.8'
+let g:clang_snippets = 1
+let g:clang_snippets_engine = 'ultisnips'
