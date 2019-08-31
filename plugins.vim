@@ -44,7 +44,7 @@ Plug 'majutsushi/tagbar'
 " ## Developping support
 Plug 'scrooloose/syntastic'
 " ## Complete
-Plug 'Valloric/YouCompleteMe'
+"Plug 'Valloric/YouCompleteMe'
 " Next generation completion framework
 "Plug 'shougo/neocomplete.vim'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -129,7 +129,7 @@ call plug#end()
 " ------------------------ Plug configuration ---------------------- "
 
 " => YouCompleteMe
-let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
+"let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
 
 " => deocomplete
 " Enable deoplete when InsertEnter.
