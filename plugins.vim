@@ -1,7 +1,8 @@
-" Plug management
+" # Plug management
 
-" ------------------------- Plugins ------------------------- "
+" ------------------------ Plugins definition ---------------------- "
 
+" setup plug.vim
 set nocompatible
 call plug#begin()
 
@@ -12,11 +13,11 @@ Plug 'morhetz/gruvbox'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
-" ## Git integrated
+" ## Useful tools for vim
+" Git integrated
 Plug 'airblade/vim-gitgutter'
 " A Git wrapper so awesome, it should be illegal
 Plug 'tpope/vim-fugitive'
-
 " auto pairs like '"({
 "Plug 'jiangmiao/auto-pairs'
 Plug 'mbbill/undotree'
@@ -32,21 +33,22 @@ Plug 'amix/vim-zenroom2'
 Plug 'vim-scripts/YankRing.vim'
 "True Sublime Text style multiple selections for Vim
 Plug 'terryma/vim-multiple-cursors'
+Plug 'scrooloose/nerdtree'
+" provides insert mode auto-completion for quotes, parens, brackets, etc.
+Plug 'raimondi/delimitmate'
+Plug 'mileszs/ack.vim'
+Plug 'gcmt/wildfire.vim'
 " cheat.sh
 if !has('nvim')
     Plug 'dbeniamine/cheat.sh-vim'
 endif
-"Perform all your vim insert mode completions with Tab
-"Plug 'ervandew/supertab'
-" Ctags bar
-Plug 'majutsushi/tagbar'
 
 " ## Developping support
 Plug 'scrooloose/syntastic'
-" ## Complete
+
+" ### Completion
 "Plug 'Valloric/YouCompleteMe'
 " Next generation completion framework
-"Plug 'shougo/neocomplete.vim'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 if !has('nvim')
     Plug 'roxma/nvim-yarp'
@@ -57,34 +59,33 @@ Plug 'rip-rip/clang_complete'
 " Coc is an intellisense engine for vim8 & neovim.
 "Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
 
-" ## Syntax check
+" ### Syntax check
 Plug 'w0rp/ale'
 "Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'cquery-project/cquery'
 Plug 'kergoth/aftersyntaxc.vim'
-"provides insert mode auto-completion for quotes, parens, brackets, etc.
-Plug 'raimondi/delimitmate'
 Plug 'vim-scripts/indexer.tar.gz'
-Plug 'brookhong/cscope.vim'
+if has('ctags')
+    " Ctags bar
+    Plug 'majutsushi/tagbar'
+endif
+if has('cscope')
+    Plug 'brookhong/cscope.vim'
+endif
 " A c/c++ client/server indexer for c/c++/objc[++] with integration based on clang.
 "Plug 'andersbakken/rtags'
 "Plug 'lyuts/vim-rtags'
 
-" ## Snippets
+" ### Snippets
 Plug 'honza/vim-snippets'
 Plug 'SirVer/ultisnips'
-
-Plug 'scrooloose/nerdtree'
-
-" ## Comment
 " Vim plug for intensely orgasmic commenting
 Plug 'scrooloose/nerdcommenter'
-Plug 'gcmt/wildfire.vim'
 " Display thin vertical lines at each indentation level for code indented with spaces
 Plug 'Yggdroot/indentLine'
 "Plug 'nathanaelkane/vim-indent-guides'
 
-" ## Navigation
+" ### Navigation
 " FSwitch is designed to allow you to switch between companion files of source
 " code (e.g. "cpp" files and their corresponding "h" files).
 Plug 'derekwyatt/vim-fswitch'
@@ -97,36 +98,31 @@ Plug 'vim-scripts/vimprj'
 " Ascii drawing plugin: lines, ellipses, arrows, fills, and more!
 "Plug 'vim-scripts/DrawIt'
 Plug 'Lokaltog/vim-easymotion'
-Plug 'mileszs/ack.vim'
 
-" ## Debug
+" ### Debug
 "Plug 'Conque-GDB'
 Plug 'huawenyu/neogdb.vim'
 Plug 'neomake/neomake'
 
+" ### Languages support
 " Python
 Plug 'klen/python-mode'
-
 " Rust
 Plug 'rust-lang/rust.vim'
-
 " Scala
 Plug 'derekwyatt/vim-scala'
-
 " Markdown
 " depend on xdg-utils curl nodejs, check the installation firstly.
 Plug 'suan/vim-instant-markdown'
-
 " latex
 Plug 'lervag/vimtex'
-
 " verilog
 Plug 'vhda/verilog_systemverilog.vim'
 
 call plug#end()
 
 
-" ------------------------ Plug configuration ---------------------- "
+" ------------------------ Plugins configuration ---------------------- "
 
 " => YouCompleteMe
 "let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
@@ -143,9 +139,21 @@ call deoplete#custom#option({
 			\ })
 
 " => cscope
-nnoremap <leader>fa :call CscopeFindInteractive(expand('<cword>'))<CR>
-nnoremap <leader>t :call ToggleLocationList()<CR>
-let g:cscope_silent = 1
+if has('cscope')
+    set csto=0
+    set cst
+    " add any database in current directory
+    if filereadable('cscope.out')
+        silent cs add cscope.out
+    " else add database pointed to by environment
+    elseif $CSCOPE_DB != ''
+        silent cs add $CSCOPE_DB
+    endif
+
+    nnoremap <leader>fc :call CscopeFindInteractive(expand('<cword>'))<CR>
+    nnoremap <leader>t :call ToggleLocationList()<CR>
+    let g:cscope_silent = 1
+endif
 
 " => switch between *.c and *.h
 nmap <leader>ch :FSHere<cr>
@@ -182,7 +190,7 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 " => Airline
 let g:airline#extensions#tabline#enabled = 1
 
-" => cheat.sh
+" => syntastic
 if !has('nvim')
     let g:syntastic_python_checkers = ['pylint']
     let g:syntastic_shell_checkers = ['shellcheck']

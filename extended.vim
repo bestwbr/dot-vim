@@ -28,8 +28,11 @@ set guioptions-=T
 
 " Colorscheme
 set background=dark
-"colorscheme peaksea
-colorscheme molokai
+try
+    "colorscheme peaksea
+    colorscheme molokai
+catch
+endtry
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -85,13 +88,13 @@ imap ½ $
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Parenthesis/bracket
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"vnoremap $1 <esc>`>a)<esc>`<i(<esc>
-"vnoremap $2 <esc>`>a]<esc>`<i[<esc>
-"vnoremap $3 <esc>`>a}<esc>`<i{<esc>
-"vnoremap $$ <esc>`>a"<esc>`<i"<esc>
-"vnoremap $q <esc>`>a'<esc>`<i'<esc>
-"vnoremap $e <esc>`>a"<esc>`<i"<esc>
-"
+vnoremap $< <esc>`>a><esc>`<i<<esc>
+vnoremap $( <esc>`>a)<esc>`<i(<esc>
+vnoremap $[ <esc>`>a]<esc>`<i[<esc>
+vnoremap ${ <esc>`>a}<esc>`<i{<esc>
+vnoremap $" <esc>`>a"<esc>`<i"<esc>
+vnoremap $' <esc>`>a'<esc>`<i'<esc>
+
 "" Map auto complete of (, ", ', [
 "inoremap $1 ()<esc>i
 "inoremap $2 []<esc>i
