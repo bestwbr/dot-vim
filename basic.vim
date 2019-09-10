@@ -25,6 +25,12 @@ nmap <leader>q :q<cr>
 " (useful for handling the permission-denied error)
 command! W w !sudo tee % > /dev/null
 
+" For neovim
+if exists(':tnoremap')
+    tnoremap <Esc> <C-\><C-n>
+    tnoremap <C-v><Esc> <Esc>
+endif
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => VIM user interface
