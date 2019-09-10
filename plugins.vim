@@ -147,10 +147,12 @@ if has('cscope')
         silent cs add cscope.out
     " else add database pointed to by environment
     elseif $CSCOPE_DB != ''
-        silent cs add $CSCOPE_DB
+        if filereadable($CSCOPE_DB)
+            silent cs add $CSCOPE_DB
+        endif
     endif
 
-    nnoremap <leader>fc :call CscopeFindInteractive(expand('<cword>'))<CR>
+    nnoremap <leader>f :call CscopeFindInteractive(expand('<cword>'))<CR>
     nnoremap <leader>t :call ToggleLocationList()<CR>
     let g:cscope_silent = 1
 endif
