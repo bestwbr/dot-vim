@@ -258,6 +258,6 @@ endif
 let g:pymode_python = 'python3'
 
 " ultra-useful for completion C code
-let g:clang_library_path='/usr/lib/libclang.so.8'
+let g:clang_library_path='/usr/lib/libclang.so'
 let g:clang_snippets = 1
 let g:clang_snippets_engine = 'ultisnips'
