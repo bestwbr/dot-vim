@@ -10,6 +10,11 @@ cd ~
 type nvim > /dev/null 2>&1 && rm -rf .config/nvim && ln -s ~/.vim .config/nvim
 type nvim > /dev/null 2>&1 && nvim +PlugInstall +qall || vim +PlugInstall +qall
 
+cd ~/.vim
+if [[ ! -f init.vim ]]; then
+    ln -s vimrc init.vim
+fi
+
 # compile YouCompleteMe
 #cd ~/.vim/plugged/YouCompleteMe
 #type cargo > /dev/null 2>&1 && RUST="--rust-completer" || RUST=""
