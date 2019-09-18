@@ -124,6 +124,11 @@ call plug#end()
 
 " ------------------------ Plugins configuration ---------------------- "
 
+" => Airline
+" Use powerline fonts by default
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
+
 " => YouCompleteMe
 "let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
 
@@ -188,9 +193,6 @@ autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in
 "map <leader>tr :NERDTreeToggle<CR>
 " Close vim when the nerdtree is the last buffer
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-
-" => Airline
-let g:airline#extensions#tabline#enabled = 1
 
 " => syntastic
 if !has('nvim')
