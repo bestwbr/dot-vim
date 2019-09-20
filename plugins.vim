@@ -47,7 +47,6 @@ endif
 Plug 'scrooloose/syntastic'
 
 " ### Completion
-"Plug 'Valloric/YouCompleteMe'
 " Next generation completion framework
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 if !has('nvim')
@@ -61,7 +60,6 @@ Plug 'rip-rip/clang_complete'
 
 " ### Syntax check
 Plug 'w0rp/ale'
-"Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'cquery-project/cquery'
 Plug 'kergoth/aftersyntaxc.vim'
 Plug 'vim-scripts/indexer.tar.gz'
@@ -72,9 +70,6 @@ endif
 if has('cscope')
     Plug 'brookhong/cscope.vim'
 endif
-" A c/c++ client/server indexer for c/c++/objc[++] with integration based on clang.
-"Plug 'andersbakken/rtags'
-"Plug 'lyuts/vim-rtags'
 
 " ### Snippets
 Plug 'honza/vim-snippets'
@@ -83,7 +78,6 @@ Plug 'SirVer/ultisnips'
 Plug 'scrooloose/nerdcommenter'
 " Display thin vertical lines at each indentation level for code indented with spaces
 Plug 'Yggdroot/indentLine'
-"Plug 'nathanaelkane/vim-indent-guides'
 
 " ### Navigation
 " FSwitch is designed to allow you to switch between companion files of source
@@ -91,16 +85,14 @@ Plug 'Yggdroot/indentLine'
 Plug 'derekwyatt/vim-fswitch'
 " vim-signature is a plugin to place, toggle and display marks.
 Plug 'kshenoy/vim-signature'
-"Just a library for some scripts.
+" Just a library for some scripts.
 Plug 'vim-scripts/DfrankUtil'
-"Plug for managing options for different projects
+" Plug for managing options for different projects
 Plug 'vim-scripts/vimprj'
 " Ascii drawing plugin: lines, ellipses, arrows, fills, and more!
-"Plug 'vim-scripts/DrawIt'
 Plug 'Lokaltog/vim-easymotion'
 
 " ### Debug
-"Plug 'Conque-GDB'
 Plug 'huawenyu/neogdb.vim'
 Plug 'neomake/neomake'
 
@@ -128,9 +120,6 @@ call plug#end()
 " Use powerline fonts by default
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
-
-" => YouCompleteMe
-"let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
 
 " => deocomplete
 " Enable deoplete when InsertEnter.
