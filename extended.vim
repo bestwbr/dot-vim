@@ -36,13 +36,13 @@ endtry
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Fast editing and reloading of vimrc configs
+" => Fast editing and reloading of local vimrc configs
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 if !has('nvim')
-    map <leader>e :e! ~/.vim/local.vim<cr>
+    map <F10> :e! ~/.vim/local.vim<cr>
     autocmd! bufwritepost ~/.vim/local.vim source ~/.vim/local.vim
 else
-    map <leader>e :e! ~/.config/nvim/local.vim<cr>
+    map <F10> :e! ~/.config/nvim/local.vim<cr>
     autocmd! bufwritepost ~/.config/nvim/local.vim source ~/.config/nvim/local.vim
 endif
 
@@ -111,21 +111,15 @@ iab xdate <c-r>=strftime("%d/%m/%y %H:%M:%S")<cr>
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Omni complete functions
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"autocmd FileType css set omnifunc=csscomplete#CompleteCSS
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Ack searching and cope displaying
 "    requires ack.vim - it's much better than vimgrep/grep
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Use the ripgrep firstly if possible (faster than ag)
 " Use the the_silver_searcher if possible (much faster than Ack)
 if executable('rg')
-  let g:ackprg = 'rg --vimgrep --smart-case'
+    let g:ackprg = 'rg --vimgrep --smart-case'
 elseif executable('ag')
-  let g:ackprg = 'ag --vimgrep --smart-case'
+    let g:ackprg = 'ag --vimgrep --smart-case'
 endif
 
 " Open Ack and put the cursor in the right position
@@ -148,10 +142,19 @@ vnoremap <silent> <leader>r :call VisualSelection('replace', '')<CR>
 " To go to the previous search results do:
 "   <leader>p
 "
-"map <leader>cc :botright cope<cr>
-"map <leader>co ggVGy:tabnew<cr>:set syntax=qf<cr>pgg
-"map <leader>n :cn<cr>
-"map <leader>p :cp<cr>
+map <leader>cc :botright cope<cr>
+map <leader>co ggVGy:tabnew<cr>:set syntax=qf<cr>pgg
+map <leader>n :cn<cr>
+map <leader>p :cp<cr>
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Filetypes
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+autocmd BufNewFile,BufRead *.[ch] set noexpandtab tabstop=8 shiftwidth=8 textwidth=79
+autocmd BufNewFile,BufRead *.md set tabstop=2 shiftwidth=2
+autocmd FileType python setlocal textwidth=79
+autocmd BufNewFile *.sh,*.py,*.[ch] exec ":call SetTitle('Jason Wang')"
 
 
 """"""""""""""""""""""""""""""

@@ -20,6 +20,8 @@ let mapleader = ";"
 nmap <leader>w :w!<cr>
 " Fast quiting
 nmap <leader>q :q<cr>
+" Save and quit
+nmap <leader>x :x<cr>
 
 " :W sudo saves the file 
 " (useful for handling the permission-denied error)
@@ -177,29 +179,30 @@ map <silent> <leader><cr> :noh<cr>
 "map <C-l> <C-W>l
 
 " Close the current buffer
-map <leader>x :Bclose<cr>:tabclose<cr>gT
+map <leader>d :Bclose<cr>:tabclose<cr>gT
 
 " Close all the buffers
-map <leader>xa :bufdo bd<cr>
+map <leader>da :bufdo bd<cr>
 
 map <leader>l :bnext<cr>
 map <leader>h :bprevious<cr>
 
 " Useful mappings for managing tabs
-"map <leader>tn :tabnew<cr>
-"map <leader>to :tabonly<cr>
-"map <leader>tc :tabclose<cr>
-"map <leader>tm :tabmove 
-"map <leader>t<leader> :tabnext 
+map <leader>j   :tabn<cr>
+map <leader>k   :tabp<cr>
+map <leader>tc  :tabc<cr>
+map <leader>tn  :tabnew<cr>
+map <leader>to :tabonly<cr>
+map <leader>tm :tabmove
 
 " Let 'tl' toggle between this and the last accessed tab
-"let g:lasttab = 1
-"nmap <Leader>tl :exe "tabn ".g:lasttab<CR>
-"au TabLeave * let g:lasttab = tabpagenr()
+let g:lasttab = 1
+nmap <Leader>tl :exe "tabn ".g:lasttab<CR>
+au TabLeave * let g:lasttab = tabpagenr()
 
 " Opens a new tab with the current buffer's path
 " Super useful when editing files in the same directory
-"map <leader>te :tabedit <c-r>=expand("%:p:h")<cr>/
+map <leader>te :tabedit <c-r>=expand("%:p:h")<cr>/
 
 " Switch CWD to the directory of the open buffer
 map <leader>cd :cd %:p:h<cr>:pwd<cr>
@@ -230,19 +233,6 @@ set laststatus=2
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Remap VIM 0 to first non-blank character
 map 0 ^
-
-" Move a line of text using ALT+[jk] or Command+[jk] on mac
-"nmap <M-j> mz:m+<cr>`z
-"nmap <M-k> mz:m-2<cr>`z
-"vmap <M-j> :m'>+<cr>`<my`>mzgv`yo`z
-"vmap <M-k> :m'<-2<cr>`>my`<mzgv`yo`z
-
-"if has("mac") || has("macunix")
-"  nmap <D-j> <M-j>
-"  nmap <D-k> <M-k>
-"  vmap <D-j> <M-j>
-"  vmap <D-k> <M-k>
-"endif
 
 " Delete trailing white space on save, useful for some filetypes ;)
 fun! CleanExtraSpaces()
@@ -285,6 +275,9 @@ noremap <Leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
 
 " Toggle paste mode on and off
 map <leader>pa :setlocal paste!<cr>
+
+" Call Rg to search underline word
+map <leader>s :call RunSearcher('Rg')<CR>
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
