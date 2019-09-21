@@ -1,3 +1,4 @@
+init.vim
 local.vim
 cache/
 autoload/
