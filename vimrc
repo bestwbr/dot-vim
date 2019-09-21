@@ -1,8 +1,8 @@
 
 if 1
-    execute 'source' fnamemodify(expand('<sfile>'), ':h').'/basic.vim'
-    execute 'source' fnamemodify(expand('<sfile>'), ':h').'/plugins.vim'
-    execute 'source' fnamemodify(expand('<sfile>'), ':h').'/extended.vim'
+    execute 'source' fnamemodify(expand('<sfile>'), ':h').'/configs/basic.vim'
+    execute 'source' fnamemodify(expand('<sfile>'), ':h').'/configs/plugins.vim'
+    execute 'source' fnamemodify(expand('<sfile>'), ':h').'/configs/extended.vim'
 try
     execute 'source' fnamemodify(expand('<sfile>'), ':h').'/local.vim'
 catch
