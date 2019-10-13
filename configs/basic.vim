@@ -180,6 +180,7 @@ map <silent> <leader><cr> :noh<cr>
 
 " Close the current buffer
 map <leader>d :Bclose<cr>:tabclose<cr>gT
+map <leader>D :bd<cr>
 
 " Close all the buffers
 map <leader>da :bufdo bd<cr>
