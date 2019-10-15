@@ -325,7 +325,11 @@ endfunction
 
 " Intialize dirctories
 function! InitializeDirectories()
-    let vimdir = $HOME . '/.vim/'
+    if has('nvim')
+        let vimdir = $HOME . '/.config/nvim/'
+    else
+        let vimdir = $HOME . '/.vim/'
+    endif
     let dir_list = {
                 \ 'backup': 'backupdir',
                 \ 'views': 'viewdir',

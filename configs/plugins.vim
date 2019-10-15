@@ -238,7 +238,7 @@ au FileType c let delimitMate_expand_cr = 1
 au FileType sh let delimitMate_expand_space = 1
 
 " PyMode
-if isdirectory(expand("~/.vim/plugged/python-mode"))
+if isdirectory(expand("~/.vim/plugged/python-mode")) || isdirectory(expand("~/.config/nvim/plugged/python-mode"))
     let g:pymode_lint_checkers = ['pyflakes']
     let g:pymode_trim_whitespaces = 0
     let g:pymode_options = 0

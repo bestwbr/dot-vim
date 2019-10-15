@@ -39,7 +39,11 @@ endif
 "    means that you can undo even when you close a buffer/VIM
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 try
-    set undodir=~/.vim/cache/undodir
+    if has('nvim')
+        set undodir=~/.config/nvim/cache/undodir
+    else
+        set undodir=~/.vim/cache/undodir
+    endif
     set undofile
 catch
 endtry
