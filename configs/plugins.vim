@@ -93,7 +93,10 @@ Plug 'vim-scripts/vimprj'
 Plug 'Lokaltog/vim-easymotion'
 
 " ### Debug
-Plug 'huawenyu/neogdb.vim'
+if has('nvim')
+    Plug 'huawenyu/new.vim'
+    Plug 'huawenyu/new-gdb.vim'
+endif
 Plug 'neomake/neomake'
 
 " ### Languages support
