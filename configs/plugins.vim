@@ -62,9 +62,9 @@ Plug 'rip-rip/clang_complete'
 Plug 'w0rp/ale'
 Plug 'cquery-project/cquery'
 Plug 'kergoth/aftersyntaxc.vim'
-Plug 'vim-scripts/indexer.tar.gz'
 if has('ctags')
     " Ctags bar
+    Plug 'vim-scripts/indexer.tar.gz'
     Plug 'majutsushi/tagbar'
 endif
 if has('cscope')
