@@ -129,6 +129,7 @@ map <leader>p :cp<cr>
 " => Filetypes
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 autocmd BufNewFile,BufRead *.[ch] set noexpandtab tabstop=8 shiftwidth=8 textwidth=79
+autocmd BufNewFile,BufRead *.cc,*.cpp,*.hpp set noexpandtab tabstop=8 shiftwidth=8 textwidth=79
 autocmd BufNewFile,BufRead *.md set tabstop=2 shiftwidth=2
 autocmd FileType python setlocal textwidth=79
 autocmd BufNewFile *.sh,*.py,*.[ch] exec ":call SetTitle('Jason Wang')"
