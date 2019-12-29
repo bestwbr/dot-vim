@@ -23,7 +23,11 @@ Plug 'tpope/vim-fugitive'
 Plug 'mbbill/undotree'
 Plug 'neui/cmakecache-syntax.vim'
 "Plug 'vim-scripts/bash-support.vim'
-Plug '/usr/bin/fzf'
+if filereadable('/usr/bin/fzf')
+    Plug '/usr/bin/fzf'
+elseif filereadable(expand('~/.zsh/external/fzf/bin/fzf'))
+    set rtp+=~/.zsh/external/fzf
+endif
 Plug 'junegunn/fzf.vim'
 "Plug 'tmux-plugins/vim-tmux-focus-events'
 " Distraction-free writing in Vim.
@@ -160,9 +164,9 @@ nmap <leader>ch :FSHere<cr>
 " => ultisnips
 " Use honza's snippets
 let g:neosnippet#snippets_directory='~/.vim/plugged/vim-snippets/snippets'
-let g:UltiSnipsExpandTrigger="<c-j>"
-let g:UltiSnipsJumpForwardTrigger="<c-l>"
-let g:UltiSnipsJumpBackwardTrigger="<c-k>"
+let g:UltiSnipsExpandTrigger='<c-j>'
+let g:UltiSnipsJumpForwardTrigger='<c-l>'
+let g:UltiSnipsJumpBackwardTrigger='<c-k>'
 
 " => YankRing
 if has('nvim')
@@ -178,13 +182,13 @@ let g:NERDTreeDirArrowExpandable = '▸'
 let g:NERDTreeDirArrowCollapsible = '▾'
 " run vim
 autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
 " run vim with a directory
 autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
+autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists('s:std_in') | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
 "map <leader>tr :NERDTreeToggle<CR>
 " Close vim when the nerdtree is the last buffer
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+autocmd bufenter * if (winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree()) | q | endif
 
 " => syntastic
 if !has('nvim')
@@ -241,7 +245,7 @@ au FileType c let delimitMate_expand_cr = 1
 au FileType sh let delimitMate_expand_space = 1
 
 " PyMode
-if isdirectory(expand("~/.vim/plugged/python-mode")) || isdirectory(expand("~/.config/nvim/plugged/python-mode"))
+if isdirectory(expand('~/.vim/plugged/python-mode')) || isdirectory(expand('~/.config/nvim/plugged/python-mode'))
     " use python 3 syntax checking
     let g:pymode_python = 'python3'
 
@@ -251,11 +255,13 @@ if isdirectory(expand("~/.vim/plugged/python-mode")) || isdirectory(expand("~/.c
     let g:pymode_rope = 0
 endif
 
-if filereadable("/usr/lib/libclang.so")
+if filereadable('/usr/lib/libclang.so')
     " ultra-useful for completion C code
     let g:clang_library_path='/usr/lib/libclang.so'
-    let g:clang_snippets = 1
-    let g:clang_snippets_engine = 'ultisnips'
+elseif filereadable(expand('~/.local/lib/libclang.so'))
+    let g:clang_library_path=expand('~/.local/lib/libclang.so')
 else
-    echo "Please install clang library and make a link of libclang.so in /usr/lib."
+    echo 'Please install clang and make a symbolic link of libclang.so.* in /usr/lib/libclang.so or ~/.local/lib/libclang.so'
 endif
+let g:clang_snippets = 1
+let g:clang_snippets_engine = 'ultisnips'
