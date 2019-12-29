@@ -242,16 +242,20 @@ au FileType sh let delimitMate_expand_space = 1
 
 " PyMode
 if isdirectory(expand("~/.vim/plugged/python-mode")) || isdirectory(expand("~/.config/nvim/plugged/python-mode"))
+    " use python 3 syntax checking
+    let g:pymode_python = 'python3'
+
     let g:pymode_lint_checkers = ['pyflakes']
     let g:pymode_trim_whitespaces = 0
     let g:pymode_options = 0
     let g:pymode_rope = 0
 endif
 
-" use python 3 syntax checking
-let g:pymode_python = 'python3'
-
-" ultra-useful for completion C code
-let g:clang_library_path='/usr/lib/libclang.so'
-let g:clang_snippets = 1
-let g:clang_snippets_engine = 'ultisnips'
+if filereadable("/usr/lib/libclang.so")
+    " ultra-useful for completion C code
+    let g:clang_library_path='/usr/lib/libclang.so'
+    let g:clang_snippets = 1
+    let g:clang_snippets_engine = 'ultisnips'
+else
+    echo "Please install clang library and make a link of libclang.so in /usr/lib."
+endif
