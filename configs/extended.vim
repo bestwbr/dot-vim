@@ -132,8 +132,11 @@ autocmd BufNewFile,BufRead *.[ch] set noexpandtab tabstop=8 shiftwidth=8 textwid
 autocmd BufNewFile,BufRead *.cc,*.cpp,*.hpp set noexpandtab tabstop=8 shiftwidth=8 textwidth=79
 autocmd BufNewFile,BufRead *.md set tabstop=2 shiftwidth=2
 autocmd FileType python setlocal textwidth=79
-autocmd BufNewFile *.sh,*.py,*.[ch] exec ":call SetTitle('Jason Wang')"
-
+try
+autocmd BufNewFile *.sh,*.py,*.[ch],*.cc,*.cpp,*.hpp exec ":call SetTitle('Jason Wang')"
+autocmd BufReadPost *.[ch],*.cc,*.cpp,*.hpp exec ":call SubCR(2)"
+catch
+endtry
 
 """"""""""""""""""""""""""""""
 " => Shell section
@@ -172,4 +175,20 @@ endfunc
 
 func! CurrentFileDir(cmd)
     return a:cmd . " " . expand("%:p:h") . "/"
+endfunc
+
+func! SubCR(lineno)
+    let l:curdate = strftime('%Y')
+    let l:crline = getline(a:lineno)
+    let l:olddate_h = matchstr(l:crline, ' [0-9]\{4}', 3)
+    let l:olddate_t = matchstr(l:crline, '-[0-9]\{4}', 3)
+    let l:newdate_h = ' ' . l:curdate
+    let l:newdate_t = '-' . l:curdate
+    if l:olddate_t != '' && l:olddate_t < l:newdate_t
+        let l:new_data_str = l:newdate_t
+        call setline(a:lineno, substitute(l:crline, l:olddate_t, l:new_data_str, ''))
+    elseif l:olddate_h != '' && l:olddate_h < l:newdate_h
+        let l:new_data_str = l:olddate_h . l:newdate_t
+        call setline(a:lineno, substitute(l:crline, l:olddate_h, l:new_data_str, ''))
+    endif
 endfunc
