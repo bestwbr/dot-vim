@@ -399,8 +399,8 @@ function! SetTitle(author)
         call append(line(".")+6, "")
     endif
     if expand("%:e") == 'h'
-        call append(line(".")+4, "#ifndef _".toupper(expand("%:r"))."_H")
-        call append(line(".")+5, "#define _".toupper(expand("%:r"))."_H")
+        call append(line(".")+4, "#ifndef __".toupper(trim(expand("%:t"), ".h"))."_H")
+        call append(line(".")+5, "#define __".toupper(trim(expand("%:t"), ".h"))."_H")
         call append(line(".")+6, "")
         call append(line(".")+7, "")
         call append(line(".")+8, "")
@@ -411,6 +411,11 @@ function! SetTitle(author)
         call append(line(".")+5, "using namespace std;")
         call append(line(".")+6, "")
         call append(line(".")+7, "")
+    endif
+    if expand("%:e") == 'hpp'
+        call append(line(".")+4, "#pragma once")
+        call append(line(".")+5, "")
+        call append(line(".")+6, "")
     endif
     " move cursor to appreciate line
     let l:line_num = line('$')
