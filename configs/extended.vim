@@ -188,7 +188,9 @@ func! SubCR(lineno)
         let l:new_data_str = l:newdate_t
         call setline(a:lineno, substitute(l:crline, l:olddate_t, l:new_data_str, ''))
     elseif l:olddate_h != '' && l:olddate_h < l:newdate_h
-        let l:new_data_str = l:olddate_h . l:newdate_t
-        call setline(a:lineno, substitute(l:crline, l:olddate_h, l:new_data_str, ''))
+        if match(l:crline, '[0-9]\{4}-') < 0
+            let l:new_data_str = l:olddate_h . l:newdate_t
+            call setline(a:lineno, substitute(l:crline, l:olddate_h, l:new_data_str, ''))
+        endif
     endif
 endfunc
