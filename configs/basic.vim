@@ -372,9 +372,10 @@ function! RunSearcher(cmd)
 endfunction
 
 " The function for setting title
-function! SetTitle(author)
+function! SetTitle()
+    let l:author = trim(system('git config user.name'))
     let l:curdate = strftime('%Y')
-    let l:copyright = 'Copyright © ' . l:curdate . ' ' . a:author . '. All Rights Reserved.'
+    let l:copyright = 'Copyright © ' . l:curdate . ' ' . l:author . '. All Rights Reserved.'
     let l:script_env = '#!/usr/bin/env '
 
     if &filetype == 'sh'
