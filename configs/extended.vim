@@ -97,6 +97,9 @@ if executable('rg')
     let g:ackprg = 'rg --vimgrep --smart-case'
 elseif executable('ag')
     let g:ackprg = 'ag --vimgrep --smart-case'
+else
+    echoerr "No rg or ag installed on your system!"
+    echo "Please install ripgrep or the_silver_searcher package."
 endif
 
 " Open Ack and put the cursor in the right position
