@@ -137,7 +137,7 @@ autocmd BufNewFile,BufRead *.md set tabstop=2 shiftwidth=2
 autocmd FileType python setlocal textwidth=79
 try
 autocmd BufNewFile *.sh,*.py,*.[ch],*.cc,*.cpp,*.hpp exec ":call SetTitle()"
-autocmd BufReadPost *.[ch],*.cc,*.cpp,*.hpp exec ":call SubCR(2)"
+autocmd BufWritePost *.[ch],*.cc,*.cpp,*.hpp exec ":call SubCR(2)"
 catch
 endtry
 
