@@ -400,8 +400,8 @@ function! SetTitle()
         call append(line(".")+6, "")
     endif
     if expand("%:e") == 'h'
-        call append(line(".")+4, "#ifndef __".toupper(trim(expand("%:t"), ".h"))."_H")
-        call append(line(".")+5, "#define __".toupper(trim(expand("%:t"), ".h"))."_H")
+        call append(line(".")+4, "#ifndef __".toupper(substitute(expand("%:t"), "\\.h", "_h", "")))
+        call append(line(".")+5, "#define __".toupper(substitute(expand("%:t"), "\\.h", "_h", "")))
         call append(line(".")+6, "")
         call append(line(".")+7, "")
         call append(line(".")+8, "")
