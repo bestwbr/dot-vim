@@ -383,7 +383,7 @@ function! SetTitle()
         call append(line("."), "")
         call append(line(".")+1, "")
     elseif &filetype == 'python'
-        call setline(1, l:script_env . 'python3')
+        call setline(1, l:script_env . 'python')
         call append(line("."),"")
         call append(line(".")+1, "")
     else
