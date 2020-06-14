@@ -374,6 +374,10 @@ endfunction
 " The function for setting title
 function! SetTitle()
     let l:author = trim(system('git config user.name'))
+    if l:author == ''
+        echoerr "Error: No user name configured in .gitconfig"
+        return
+    endif
     let l:curdate = strftime('%Y')
     let l:copyright = 'Copyright © ' . l:curdate . ' ' . l:author . '. All Rights Reserved.'
     let l:script_env = '#!/usr/bin/env '
