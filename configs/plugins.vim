@@ -27,6 +27,8 @@ if filereadable('/usr/bin/fzf')
     Plug '/usr/bin/fzf'
 elseif filereadable(expand('~/.zsh/external/fzf/bin/fzf'))
     set rtp+=~/.zsh/external/fzf
+elseif filereadable(expand('~/.fzf/bin/fzf'))
+    set rtp+=~/.fzf
 endif
 Plug 'junegunn/fzf.vim'
 "Plug 'tmux-plugins/vim-tmux-focus-events'
