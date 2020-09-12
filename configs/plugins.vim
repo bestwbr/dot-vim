@@ -116,7 +116,7 @@ Plug 'derekwyatt/vim-scala'
 " depend on xdg-utils curl nodejs, check the installation firstly.
 Plug 'suan/vim-instant-markdown'
 " latex
-Plug 'lervag/vimtex'
+"Plug 'lervag/vimtex'
 " verilog
 Plug 'vhda/verilog_systemverilog.vim'
 
