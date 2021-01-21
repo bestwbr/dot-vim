@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# check python package for plugins
+function ChkInsPyPkg() {
+    if [[ "$(pip list | grep $1)" == "" ]]; then
+        pip install --user jedi
+    fi
+}
+
 # install vim-plug
 if [[ ! -e ~/.vim/autoload/plug.vim ]]; then
     curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
@@ -14,3 +21,7 @@ cd ~/.vim
 [[ ! -f init.vim ]] && ln -s vimrc init.vim
 
 [[ ! -d cache ]] && mkdir cache
+
+# These packages are used for python-mode plugin
+ChkInsPyPkg jedi
+ChkInsPyPkg pylama
